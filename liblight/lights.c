@@ -79,28 +79,6 @@ void init_globals(void)
 }
 
 static int
-write_int(char const* path, int value)
-{
-    int fd;
-    static int already_warned = 0;
-
-    fd = open(path, O_RDWR);
-    if (fd >= 0) {
-        char buffer[20];
-        int bytes = snprintf(buffer, sizeof(buffer), "%d\n", value);
-        ssize_t amt = write(fd, buffer, (size_t)bytes);
-        close(fd);
-        return amt == -1 ? -errno : 0;
-    } else {
-        if (already_warned == 0) {
-            ALOGE("write_int failed to open %s\n", path);
-            already_warned = 1;
-        }
-        return -errno;
-    }
-}
-
-static int
 is_lit(struct light_state_t const* state)
 {
     return state->color & 0x00ffffff;
